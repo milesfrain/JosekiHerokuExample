@@ -1,6 +1,6 @@
 # This example file taken from:
 # https://github.com/amellnik/Joseki.jl/blob/1348cc354f898ef27bd0c1c67276dfaf66d84eac/examples/docker-simple.jl
-# Only modifications are these comments and setting verbose=true in HTTP.serve
+# with some minor modifications
 
 using Joseki, JSON, HTTP
 
@@ -35,12 +35,13 @@ end
 
 # Make a router and add routes for our endpoints.
 endpoints = [
+    (req -> "Hello", "GET", "/"),
     (pow, "GET", "/pow"),
     (bin, "POST", "/bin")
 ]
 r = Joseki.router(endpoints)
 
-# If there is a PORT environment variable defined us it, otherwise use 8000
-haskey(ENV, "PORT") ? port = ENV["PORT"] : port = 8000
+port = parse(Int, ARGS[1])
+
 # Fire up the server, binding to all ips
 HTTP.serve(r, "0.0.0.0", port; verbose=true)
